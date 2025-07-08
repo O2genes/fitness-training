@@ -1031,36 +1031,50 @@ function proceedToTraining() {
 
 // Binaural Beats Audio Functions
 function playBinauralFrequency(frequency) {
-    // Stop any currently playing audio first
-    stopAllBinauralAudio();
-    
-    // Get the audio element
+    // Get the audio element first
     const audioElement = document.getElementById(frequency + 'Audio');
-    if (audioElement) {
-        // Get frequency name for display
-        const frequencyNames = {
-            'theta': 'Theta (4-8 Hz)',
-            'alpha': 'Alpha (8-14 Hz)',
-            'beta': 'Beta (14-30 Hz)',
-            'gamma': 'Gamma (30-100 Hz)'
-        };
-        currentlyPlayingBinauralFrequency = frequencyNames[frequency] || 'Binaural Beats';
-        
-        // Immediate visual feedback - show loading state
-        document.querySelectorAll('.frequency-card').forEach(card => {
-            card.classList.remove('playing', 'loading');
-        });
-        audioElement.parentElement.classList.add('loading');
-        
-        // Force load the audio if not already loaded
-        if (audioElement.readyState < 2) {
-            audioElement.load();
+    if (!audioElement) {
+        console.error(`Audio element with ID ${frequency}Audio not found`);
+        return;
+    }
+    
+    // Stop any currently playing audio first, but exclude the target audio
+    const audioElements = document.querySelectorAll('.frequency-card audio');
+    audioElements.forEach(audio => {
+        if (audio !== audioElement && !audio.paused) {
+            audio.pause();
+            audio.currentTime = 0;
         }
-        
-        // Set current audio reference
-        currentlyPlayingAudio = audioElement;
-        
-        // Play the audio with immediate feedback
+    });
+    
+    // Remove all playing classes
+    document.querySelectorAll('.frequency-card').forEach(card => {
+        card.classList.remove('playing', 'loading');
+    });
+    
+    // Get frequency name for display
+    const frequencyNames = {
+        'theta': 'Theta (4-8 Hz)',
+        'alpha': 'Alpha (8-14 Hz)',
+        'beta': 'Beta (14-30 Hz)',
+        'gamma': 'Gamma (30-100 Hz)'
+    };
+    currentlyPlayingBinauralFrequency = frequencyNames[frequency] || 'Binaural Beats';
+    
+    // Show loading state
+    audioElement.parentElement.classList.add('loading');
+    
+    // Force load the audio if not already loaded
+    if (audioElement.readyState < 2) {
+        audioElement.load();
+    }
+    
+    // Set current audio reference
+    currentlyPlayingAudio = audioElement;
+    
+    // Add a small delay to prevent race condition
+    setTimeout(() => {
+        // Play the audio with proper error handling
         const playPromise = audioElement.play();
         
         if (playPromise !== undefined) {
@@ -1077,25 +1091,27 @@ function playBinauralFrequency(frequency) {
                 // Remove loading state on error
                 audioElement.parentElement.classList.remove('loading');
                 
-                // Fallback - show message if audio fails to play
-                showTrainingMessage('Binaural beats audio could not be played. Please check your connection or try again.');
+                // Only show error message if it's not an AbortError from rapid clicking
+                if (error.name !== 'AbortError') {
+                    showTrainingMessage('Binaural beats audio could not be played. Please check your connection or try again.');
+                }
                 
                 // Reset current audio reference
                 currentlyPlayingAudio = null;
                 currentlyPlayingBinauralFrequency = null;
             });
         }
-        
-        // Set up event listener for when audio ends (only once)
-        audioElement.removeEventListener('ended', handleAudioEnd);
-        audioElement.addEventListener('ended', handleAudioEnd);
-        
-        // Set up event listener for pause/play to update visual feedback (only once)
-        audioElement.removeEventListener('pause', handleAudioPause);
-        audioElement.removeEventListener('play', handleAudioPlay);
-        audioElement.addEventListener('pause', handleAudioPause);
-        audioElement.addEventListener('play', handleAudioPlay);
-    }
+    }, 50); // Small delay to prevent race condition
+    
+    // Set up event listener for when audio ends (only once)
+    audioElement.removeEventListener('ended', handleAudioEnd);
+    audioElement.addEventListener('ended', handleAudioEnd);
+    
+    // Set up event listener for pause/play to update visual feedback (only once)
+    audioElement.removeEventListener('pause', handleAudioPause);
+    audioElement.removeEventListener('play', handleAudioPlay);
+    audioElement.addEventListener('pause', handleAudioPause);
+    audioElement.addEventListener('play', handleAudioPlay);
 }
 
 // Event handler functions to avoid duplicate listeners
@@ -1160,38 +1176,52 @@ let currentlyPlayingBinauralFrequency = null;
 
 // Function to play scenario audio
 function playScenarioAudio(audioId) {
-    // Stop any currently playing audio first
-    stopAllScenarioAudio();
-    
-    // Get the audio element
+    // Get the audio element first
     const audioElement = document.getElementById(audioId);
-    if (audioElement) {
-        // Get scenario name for display
-        const scenarioNames = {
-            'scenario1': 'Ocean Sounds',
-            'scenario2': 'Forest Sounds', 
-            'scenario3': 'Sunrise Sounds',
-            'scenario4': 'Evening Sounds',
-            'scenario5': 'Farm Sounds',
-            'scenario6': 'Lake Sounds'
-        };
-        currentlyPlayingScenarioName = scenarioNames[audioId] || 'Background Music';
-        
-        // Immediate visual feedback - show loading state
-        document.querySelectorAll('.scenario-button').forEach(btn => {
-            btn.classList.remove('playing', 'loading');
-        });
-        audioElement.parentElement.classList.add('loading');
-        
-        // Force load the audio if not already loaded
-        if (audioElement.readyState < 2) {
-            audioElement.load();
+    if (!audioElement) {
+        console.error(`Audio element with ID ${audioId} not found`);
+        return;
+    }
+    
+    // Stop any currently playing audio first, but exclude the target audio
+    const audioElements = document.querySelectorAll('.scenarios-container audio');
+    audioElements.forEach(audio => {
+        if (audio !== audioElement && !audio.paused) {
+            audio.pause();
+            audio.currentTime = 0;
         }
-        
-        // Set current audio reference
-        currentlyPlayingAudio = audioElement;
-        
-        // Play the audio with immediate feedback
+    });
+    
+    // Remove all playing classes
+    document.querySelectorAll('.scenario-button').forEach(btn => {
+        btn.classList.remove('playing', 'loading');
+    });
+    
+    // Get scenario name for display
+    const scenarioNames = {
+        'scenario1': 'Ocean Sounds',
+        'scenario2': 'Forest Sounds', 
+        'scenario3': 'Sunrise Sounds',
+        'scenario4': 'Evening Sounds',
+        'scenario5': 'Farm Sounds',
+        'scenario6': 'Lake Sounds'
+    };
+    currentlyPlayingScenarioName = scenarioNames[audioId] || 'Background Music';
+    
+    // Show loading state
+    audioElement.parentElement.classList.add('loading');
+    
+    // Force load the audio if not already loaded
+    if (audioElement.readyState < 2) {
+        audioElement.load();
+    }
+    
+    // Set current audio reference
+    currentlyPlayingAudio = audioElement;
+    
+    // Add a small delay to prevent race condition
+    setTimeout(() => {
+        // Play the audio with proper error handling
         const playPromise = audioElement.play();
         
         if (playPromise !== undefined) {
@@ -1208,25 +1238,27 @@ function playScenarioAudio(audioId) {
                 // Remove loading state on error
                 audioElement.parentElement.classList.remove('loading');
                 
-                // Fallback - show message if audio fails to play
-                showTrainingMessage('Audio could not be played. Please check your connection or try again.');
+                // Only show error message if it's not an AbortError from rapid clicking
+                if (error.name !== 'AbortError') {
+                    showTrainingMessage('Audio could not be played. Please check your connection or try again.');
+                }
                 
                 // Reset current audio reference
                 currentlyPlayingAudio = null;
                 currentlyPlayingScenarioName = null;
             });
         }
-        
-        // Set up event listener for when audio ends (reuse the same handler)
-        audioElement.removeEventListener('ended', handleAudioEnd);
-        audioElement.addEventListener('ended', handleAudioEnd);
-        
-        // Set up event listener for pause/play to update visual feedback (reuse handlers)
-        audioElement.removeEventListener('pause', handleAudioPause);
-        audioElement.removeEventListener('play', handleAudioPlay);
-        audioElement.addEventListener('pause', handleAudioPause);
-        audioElement.addEventListener('play', handleAudioPlay);
-    }
+    }, 50); // Small delay to prevent race condition
+    
+    // Set up event listener for when audio ends (reuse the same handler)
+    audioElement.removeEventListener('ended', handleAudioEnd);
+    audioElement.addEventListener('ended', handleAudioEnd);
+    
+    // Set up event listener for pause/play to update visual feedback (reuse handlers)
+    audioElement.removeEventListener('pause', handleAudioPause);
+    audioElement.removeEventListener('play', handleAudioPlay);
+    audioElement.addEventListener('pause', handleAudioPause);
+    audioElement.addEventListener('play', handleAudioPlay);
 }
 
 // Function to stop all scenario audio
