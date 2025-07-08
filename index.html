@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>Cocoon Fitness & Wellness Training</title>
+    <link rel="stylesheet" href="cfhp.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-logo">O₂</div>
+        <div class="loading-text">COCOON FITNESS & WELLNESS</div>
+        <div class="loading-subtext">Hyperbaric Training Platform</div>
+    </div>
+
+    <!-- Animated oxygen background -->
+    <div class="oxygen-bg" id="oxygenBackground"></div>
+    
+    <div class="app-container">
+        <!-- Welcome Page -->
+        <div id="welcomePage" class="page welcome-page active">
+        <div class="welcome-content">
+            <div class="welcome-logo">O₂</div>
+
+            <div class="welcome-messages">
+            <div class="welcome-message" id="welcomeMessage1">
+                Hey there, welcome to Cocoon Fitness & Wellness Training!
+            </div>
+            <div class="welcome-message" id="welcomeMessage2">
+                We provide you multiple training programmes to enrich your hyperbaric journey
+            </div>
+            <div class="welcome-message" id="welcomeMessage3">
+                Please enjoy!
+            </div>
+            </div>
+
+            <!-- ✅ Button will appear after "Please enjoy!" -->
+            <button class="nav-button" id="welcomeNextBtn" onclick="showPage('scenarioPage')" style="display: none;">
+            Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+        <!-- Scenario Selection Page -->
+        <div id="scenarioPage" class="page">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-logo">O₂</div>
+                <h1 class="greeting">Choose Your Background Protocol</h1>
+                <p class="subtext">Select the audio experience that will accompany your training session</p>
+            </header>
+            
+            <!-- Main content -->
+            <main class="main-content">
+                <div class="protocol-selection">
+                    <!-- Binaural Beats Protocol -->
+                    <div class="protocol-card" onclick="selectProtocol('binaural')">
+                        <div class="protocol-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h2 class="protocol-title">Binaural Beats Therapy</h2>
+                        <p class="protocol-description">
+                            This therapy uses two tones of slightly different frequencies presented to each ear, creating an auditory illusion that influences brainwave activity.
+                        </p>
+                        <div class="protocol-benefits">
+                            <ul>
+                                <li><strong>Multiple frequencies:</strong> Theta, Alpha, Beta, and Gamma waves</li>
+                                <li><strong>Versatile benefits:</strong> Meditation, focus, relaxation, and peak cognition</li>
+                            </ul>
+                        </div>
+                        <button class="protocol-button">
+                            <i class="fas fa-headphones"></i> Select Binaural Beats Therapy
+                        </button>
+                    </div>
+
+                    <!-- Scenario Protocol -->
+                    <div class="protocol-card" onclick="selectProtocol('scenario')">
+                        <div class="protocol-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h2 class="protocol-title">Scenario-Based Background Music</h2>
+                        <p class="protocol-description">
+                            This feature offers immersive environments to enhance your training experience.
+                        </p>
+                        <div class="protocol-benefits">
+                            <ul>
+                                <li><strong>Emotional immersion:</strong> Enhances mood and presence through familiar settings</li>
+                                <li><strong>Mental escapism:</strong> Promotes relaxation in calm, imaginary scenarios</li>
+
+                            </ul>
+                        </div>
+                        <button class="protocol-button">
+                            <i class="fas fa-play"></i> Select Scenario Mode
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Navigation buttons -->
+                <div class="nav-buttons">
+                    <button class="nav-button back" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="nav-button" onclick="goNext()" disabled id="nextButton">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Training Flow Page -->
+        <div id="trainingPage" class="page">
+            <!-- Music status indicator -->
+            <div class="music-status" id="musicStatus" style="display: none;">
+                <i class="fas fa-music music-icon"></i>
+                <span class="music-text" id="musicStatusText">Background music playing</span>
+                <button class="music-control-btn" id="musicControlBtn" onclick="toggleAudioPlayback()">
+                    <i class="fas fa-pause" id="musicControlIcon"></i>
+                </button>
+            </div>
+
+            <!-- Header -->
+            <header class="header">
+                <div class="header-logo">O₂</div>
+                <h1 class="greeting">Training Programmes Selection</h1>
+                <p class="subtext">Complete all training modules in the recommended order from 1 to 4 for optimal results</p>
+            </header>
+            
+            <!-- Main content -->
+            <main class="main-content">
+                <div class="training-flow">
+                    <!-- Training 1: Peripheral Vision -->
+                    <div class="training-card" onclick="startTraining('peripheral')">
+                        <div class="training-order">1</div>
+                        <div class="training-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="training-title">Peripheral Vision Training</h3>
+                        <p class="training-description">
+                            Enhance your visual awareness and attention through targeted peripheral vision exercises
+                        </p>
+                    </div>
+
+                    <!-- Training 2: Moving Focus -->
+                    <div class="training-card" onclick="startTraining('moving')">
+                        <div class="training-order">2</div>
+                        <div class="training-icon">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <h3 class="training-title">Moving Focus Training</h3>
+                        <p class="training-description">
+                            Improve sustained attention and visual tracking skills with dynamic focus exercises
+                        </p>
+                    </div>
+
+                    <!-- Training 3: Breath Training -->
+                    <div class="training-card" onclick="startTraining('breath')">
+                        <div class="training-order">3</div>
+                        <div class="training-icon">
+                            <i class="fas fa-lungs"></i>
+                        </div>
+                        <h3 class="training-title">Breath Training</h3>
+                        <p class="training-description">
+                            Master breathing techniques to optimize oxygen flow and enhance relaxation
+                        </p>
+                    </div>
+
+                    <!-- Training 4: Body Scan -->
+                    <div class="training-card" onclick="startTraining('bodyscan')">
+                        <div class="training-order">4</div>
+                        <div class="training-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="training-title">Body Scan Training</h3>
+                        <p class="training-description">
+                            Complete your session with mindful body awareness and deep relaxation meditation
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation buttons -->
+                <div class="nav-buttons">
+                    <button class="nav-button back" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="nav-button" onclick="goNext()" id="nextTrainingButton">
+                        Complete Session <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Completion Page -->
+        <div id="completionPage" class="page completion-page">
+            <div class="completion-message" id="completionMessage1">
+                Congratulations! You have completed a Cocoon Fitness & Wellness training session
+            </div>
+            <div class="completion-message" id="completionMessage2">
+                Do you feel refreshed now?
+            </div>
+            <div class="completion-message" id="completionMessage3">
+                Continue with our Cocoon Fitness & Wellness training to get the most out of each hyperbaric session
+            </div>
+            <div class="completion-message" id="completionMessage4">
+                See you! :)
+            </div>
+            
+            <!-- Quit button - will appear after all messages -->
+            <button class="nav-button quit-button" id="quitButton" onclick="quitApplication()" style="display: none;">
+                <i class="fas fa-sign-out-alt"></i> Quit
+            </button>
+        </div>
+
+        <!-- Binaural Beats Therapy Page -->
+        <div id="binauralBeatsPage" class="page">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-logo">♫</div>
+                <h1 class="greeting">Binaural Beats Therapy</h1>
+                <p class="subtext">Choose your desired brainwave frequency for optimal mental state</p>
+            </header>
+            
+            <!-- Main content -->
+            <main class="main-content">
+                <!-- Introduction to Binaural Beats -->
+                <div class="info-section">
+                    <div class="section-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h2 class="section-title">What are Binaural Beats?</h2>
+                    <div class="section-content">
+                        <p>Binaural beats are a form of auditory illusion where two tones of slightly different frequencies are presented separately to each ear. The brain perceives a third tone — the binaural beat — which is the difference between the two frequencies.</p>
+                        <br>
+                        <p><strong>How it works:</strong> These beats are believed to influence brainwave activity and may support various mental states like relaxation, focus, meditation, and sleep through natural "brainwave entrainment."</p>
+                    </div>
+                </div>
+
+                <!-- Session Preparation -->
+                <div class="info-section">
+                    <div class="section-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h2 class="section-title">Session Preparation</h2>
+                    <div class="section-content">
+                        <ul class="evidence-list">
+                            <li><strong>Use headphones:</strong> Required for proper binaural effect</li>
+                            <li><strong>Set volume:</strong> Comfortable listening level (not too loud)</li>
+                            <li><strong>Safety:</strong> Stop if you feel any discomfort</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Frequency Selection -->
+                <div class="info-section">
+                    <div class="section-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h2 class="section-title">Choose Your Frequency</h2>
+                    <div class="binaural-frequencies">
+                        <!-- Theta Frequency -->
+                        <div class="frequency-card" onclick="playBinauralFrequency('theta')">
+                            <div class="frequency-icon theta-icon"></div>
+                            <h3 class="frequency-title">Theta (4-8 Hz)</h3>
+                            <p class="frequency-description">For deep meditation, inner peace, mindefulness</p>
+                            <audio id="thetaAudio" preload="auto">
+                                <source src="Theta.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+
+                        <!-- Alpha Frequency -->
+                        <div class="frequency-card" onclick="playBinauralFrequency('alpha')">
+                            <div class="frequency-icon alpha-icon"></div>
+                            <h3 class="frequency-title">Alpha (8-14 Hz)</h3>
+                            <p class="frequency-description">For stress relief, light meditation </p>
+                            <audio id="alphaAudio" preload="auto">
+                                <source src="Alpha.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+
+                        <!-- Beta Frequency -->
+                        <div class="frequency-card" onclick="playBinauralFrequency('beta')">
+                            <div class="frequency-icon beta-icon"></div>
+                            <h3 class="frequency-title">Beta (14-30 Hz)</h3>
+                            <p class="frequency-description">For studying, focus, problem-solving, working memory, productivity.</p>
+                            <audio id="betaAudio" preload="auto">
+                                <source src="Beta.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+
+                        <!-- Gamma Frequency -->
+                        <div class="frequency-card" onclick="playBinauralFrequency('gamma')">
+                            <div class="frequency-icon gamma-icon"></div>
+                            <h3 class="frequency-title">Gamma (30-100 Hz)</h3>
+                            <p class="frequency-description">For peak cognition, energy, enhanced memory, high-level thinking.</p>
+                            <audio id="gammaAudio" preload="auto">
+                                <source src="Gamma.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Box -->
+                <div class="warning-box">
+                    <div class="warning-title">⚠️ Important Notice</div>
+                    <div class="warning-text">
+                        Consult your doctor if you have seizures, epilepsy, or neurological conditions. Stop if you feel discomfort. This is not medical treatment.
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-buttons">
+                    <button class="nav-button back" onclick="goBackFromBinaural()">
+                        <i class="fas fa-arrow-left"></i> Back to Protocols
+                    </button>
+                    <button class="nav-button" onclick="proceedToTraining()">
+                        Continue to Training <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Scenario Selection Page -->
+        <div id="scenarioSelectionPage" class="page">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-logo">O₂</div>
+                <h1 class="greeting">Scenario Selection</h1>
+                <p class="subtext">Choose one favorite scenario and immerse yourself into the settings...</p>
+            </header>
+            
+            <!-- Main content -->
+            <main class="main-content">
+                <!-- Scenarios container -->
+                <div class="scenarios-container">
+                    <!-- Scenario 1 -->
+                    <div class="scenario-button" onclick="playScenarioAudio('scenario1')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h3 class="scenario-title">Scenario 1: By the ocean</h3>
+                        <audio id="scenario1" preload="auto">
+                            <source src="ocean.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    
+                    <!-- Scenario 2 -->
+                    <div class="scenario-button" onclick="playScenarioAudio('scenario2')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="scenario-title">Scenario 2: In the forest</h3>
+                        <audio id="scenario2" preload="auto">
+                            <source src="forest.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    
+                    <!-- Scenario 3 -->
+                    <div class="scenario-button" onclick="playScenarioAudio('scenario3')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <h3 class="scenario-title">Scenario 3: Early morning sun rise</h3>
+                        <audio id="scenario3" preload="auto">
+                            <source src="sunrise.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    
+                    <!-- Scenario 4 -->
+                    <div class="scenario-button" onclick="playScenarioAudio('scenario4')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="scenario-title">Scenario 4: Late evening star gazing</h3>
+                        <audio id="scenario4" preload="auto">
+                            <source src="evening.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    
+                    <!-- Scenario 5 -->
+                    <div class="scenario-button" onclick="playScenarioAudio('scenario5')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3 class="scenario-title">Scenario 5: By the farm</h3>
+                        <audio id="scenario5" preload="auto">
+                            <source src="farm.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    
+                    <!-- Scenario 6 -->
+                    <div class="scenario-button" onclick="playScenarioAudio('scenario6')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-ship"></i>
+                        </div>
+                        <h3 class="scenario-title">Scenario 6: Floating on the lake</h3>
+                        <audio id="scenario6" preload="auto">
+                            <source src="lake.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-buttons">
+                    <button class="nav-button back" onclick="goBackFromScenario()">
+                        <i class="fas fa-arrow-left"></i> Back to Protocols
+                    </button>
+                    <button class="nav-button" onclick="proceedToTrainingFromScenario()">
+                        Continue to Training <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Peripheral Vision Training Page -->
+        <div id="peripheralVisionPage" class="page vision-training-page">
+            <div class="vision-container">
+                <div class="vision-therapy-area">
+                    <div class="vision-central-dot"></div>
+                    
+                    <div class="vision-light vision-light-top-left" data-position="top-left"></div>
+                    <div class="vision-light vision-light-top-right" data-position="top-right"></div>
+                    <div class="vision-light vision-light-bottom-left" data-position="bottom-left"></div>
+                    <div class="vision-light vision-light-bottom-right" data-position="bottom-right"></div>
+                    
+                    <div class="vision-game-info">
+                        <button class="vision-exit-btn" onclick="exitVisionGame()">Exit Training</button>
+                        <div class="vision-game-progress">
+                            <div class="vision-progress-item">
+                                <div class="vision-progress-label">Round</div>
+                                <div class="vision-progress-value"><span id="visionRound">0</span></div>
+                            </div>
+                            <div class="vision-progress-item">
+                                <div class="vision-progress-label">Score</div>
+                                <div class="vision-progress-value"><span id="visionScore">0</span></div>
+                            </div>
+                            <div class="vision-progress-item">
+                                <div class="vision-progress-label">Accuracy</div>
+                                <div class="vision-progress-value"><span id="visionAccuracy">-</span>%</div>
+                            </div>
+                        </div>
+                        <div class="vision-game-stats">
+                            <div class="vision-stat-item">
+                                <div class="vision-stat-label">Avg Response</div>
+                                <div class="vision-stat-value"><span id="visionAvgResponse">-</span>ms</div>
+                            </div>
+                            <div class="vision-stat-item">
+                                <div class="vision-stat-label">Best Time</div>
+                                <div class="vision-stat-value"><span id="visionBestTime">-</span>ms</div>
+                            </div>
+                            <div class="vision-stat-item">
+                                <div class="vision-stat-label">Target Color</div>
+                                <div class="vision-stat-value" id="visionTargetColorName">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vision-instructions" id="visionInstructions">
+                    <h2>Peripheral Vision Training</h2>
+                    <p><strong>Instructions:</strong></p>
+                    <p>1. Keep your eyes focused on the colored dot in the center at all times</p>
+                    <p>2. Four colored lights will appear in the corners and change every 1.5 seconds</p>
+                    <p>3. Click the light that matches the target color as quickly as possible</p>
+                    <p>4. Use only your peripheral vision - don't look directly at the lights!</p>
+                    <p>5. Use the "Exit Training" button to quit anytime</p>
+                    <br>
+                    <button class="nav-button" onclick="startVisionTraining()">Start Training</button>
+                </div>
+                
+                <div class="vision-countdown hidden" id="visionCountdown">3</div>
+                
+                <div class="vision-results hidden" id="visionResults">
+                    <h2>Training Complete!</h2>
+                    <div id="visionFinalStats"></div>
+                    <div class="nav-buttons">
+                        <button class="nav-button" onclick="resetVisionGame()">Train Again</button>
+                        <button class="nav-button back" onclick="exitVisionTraining()">Back to Training Menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moving Focus Training Page -->
+        <div id="movingFocusPage" class="page moving-training-page">
+            <div class="moving-app-container">
+                <!-- Header -->
+                <header class="moving-header">
+                    <div class="header-logo">O₂</div>
+                    <h1 class="greeting">Moving Focus Training</h1>
+                    <p class="subtext">Improve your sustained attention and visual tracking skills</p>
+                </header>
+                
+                <!-- Instructions Panel -->
+                <div class="moving-instructions-panel" id="movingInstructionsPanel">
+                    <h2 class="moving-instructions-title">Focus Training</h2>
+                    
+                    <div class="moving-dot-legend">
+                        <div class="moving-legend-item">
+                            <div class="moving-legend-dot green"></div>
+                            <span class="moving-legend-text">GREEN DOT - Focus Target</span>
+                        </div>
+                        <div class="moving-legend-item">
+                            <div class="moving-legend-dot blue"></div>
+                            <span class="moving-legend-text">BLUE DOT - Distractor</span>
+                        </div>
+                        <div class="moving-legend-item">
+                            <div class="moving-legend-dot red"></div>
+                            <span class="moving-legend-text">RED DOT - Distractor</span>
+                        </div>
+                        <div class="moving-legend-item">
+                            <div class="moving-legend-dot yellow"></div>
+                            <span class="moving-legend-text">YELLOW DOT - Distractor</span>
+                        </div>
+                        <div class="moving-legend-item">
+                            <div class="moving-legend-dot purple"></div>
+                            <span class="moving-legend-text">PURPLE DOT - Distractor</span>
+                        </div>
+                    </div>
+                    
+                    <div class="moving-instruction-item">
+                        <div class="moving-instruction-icon">1</div>
+                        <div class="moving-instruction-text">
+                            <strong>Focus ONLY on the GREEN dot:</strong> Keep your eyes locked on the moving green dot at all times. This is your primary target and trains your smooth pursuit eye movements.
+                        </div>
+                    </div>
+                    
+                    <div class="moving-instruction-item">
+                        <div class="moving-instruction-icon">2</div>
+                        <div class="moving-instruction-text">
+                            <strong>Ignore ALL distractor dots:</strong> The BLUE, RED, YELLOW, and PURPLE moving dots are designed to pull your attention away from the green target. Resist the urge to look at them.
+                        </div>
+                    </div>
+                    
+                    <div class="moving-instruction-item">
+                        <div class="moving-instruction-icon">3</div>
+                        <div class="moving-instruction-text">
+                            <strong>Maintain smooth tracking:</strong> Follow the green dot with smooth, continuous eye movements. Avoid jerky movements and keep your head still.
+                        </div>
+                    </div>
+                    
+                    <div class="moving-instruction-item">
+                        <div class="moving-instruction-icon">4</div>
+                        <div class="moving-instruction-text">
+                            <strong>Build distraction resistance:</strong> When you notice your attention being pulled to any colored distractor dots, gently redirect your focus back to the green dot.
+                        </div>
+                    </div>
+                    
+                    <div class="moving-evidence-note">
+                        <strong>🧠 Evidence-Based Benefits:</strong>
+                        <p>Training with visual distractors significantly enhances selective attention, cognitive control, and the ability to filter irrelevant information. This strengthens the brain's executive control networks.</p>
+                    </div>
+                </div>
+                
+                <!-- Controls -->
+                <div class="moving-controls">
+                    <button class="moving-start-button" id="movingStartButton">
+                        <i class="fas fa-play"></i> Start 3-Minute Challenge
+                    </button>
+                    <button class="moving-stop-button" id="movingStopButton">
+                        <i class="fas fa-stop"></i> Stop Training
+                    </button>
+                    <button class="nav-button back" onclick="exitMovingTraining()" style="margin-left: 20px;">
+                        <i class="fas fa-arrow-left"></i> Back to Training Menu
+                    </button>
+                </div>
+                
+                <!-- Timer Display -->
+                <div class="moving-timer-display" id="movingTimerDisplay" style="display: none;">
+                    <div class="moving-timer" id="movingTimer">3:00</div>
+                    <div class="moving-progress-bar">
+                        <div class="moving-progress-fill" id="movingProgressFill"></div>
+                    </div>
+                </div>
+                
+                <!-- Training Area -->
+                <div class="moving-training-area" id="movingTrainingArea">
+                    <div class="moving-dot focus-dot" id="movingFocusDot"></div>
+                    <div class="moving-dot distractor-dot blue" id="movingBlueDistractor"></div>
+                    <div class="moving-dot distractor-dot red" id="movingRedDistractor"></div>
+                    <div class="moving-dot distractor-dot yellow" id="movingYellowDistractor"></div>
+                    <div class="moving-dot distractor-dot purple" id="movingPurpleDistractor"></div>
+                </div>
+                
+                <!-- Completion Message -->
+                <div class="moving-completion-message" id="movingCompletionMessage">
+                    <h2 class="moving-completion-title">🎯 Challenge Complete!</h2>
+                    <p class="moving-completion-text">Excellent work! You've completed a 3-minute focused attention training session with distractors. This advanced training helps build stronger selective attention and distraction resistance abilities.</p>
+                    <div class="nav-buttons">
+                        <button class="nav-button" id="movingRestartButton">
+                            <i class="fas fa-redo"></i> Start Another Challenge
+                        </button>
+                        <button class="nav-button back" onclick="exitMovingTraining()">
+                            <i class="fas fa-arrow-left"></i> Back to Training Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breathing Training Page -->
+        <div id="breathingPage" class="page breathing-training-page">
+            <!-- Header -->
+            <header class="breathing-header">
+                <div class="header-logo">O₂</div>
+                <h1 class="greeting">Breathing Training</h1>
+                <p class="subtext">Enhance your oxygen therapy with research-based breathing techniques</p>
+            </header>
+
+            <!-- Introduction Screen -->
+            <div class="breathing-intro-screen" id="breathingIntroScreen">
+                <div class="breathing-intro-content">
+                    <div class="breathing-intro-section">
+                        <div class="breathing-intro-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <h2 class="breathing-intro-title">Welcome to Breathing Training</h2>
+                        <p class="breathing-intro-description">
+                            Please watch and follow the guide video about the 4-7-8 breathing exercise. After the guide video, you can then choose your preferred breathing exercise that Cocoon provides you.
+                        </p>
+                        
+                        <div class="breathing-intro-buttons">
+                            <a href="https://www.youtube.com/watch?v=1Dv-ldGLnIY" target="_blank" class="breathing-guide-video-button">
+                                <i class="fab fa-youtube"></i>
+                                Watch 4-7-8 Breathing Guide Video
+                            </a>
+                            <button class="nav-button" onclick="showBreathingModeSelection()">
+                                Continue to Breathing Exercises <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="nav-button back" onclick="exitBreathingTraining()">
+                        <i class="fas fa-arrow-left"></i> Back to Training Menu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mode Selection Screen -->
+            <div class="breathing-mode-selection" id="breathingModeSelection" style="display: none;">
+                <div class="main-content">
+                    <div class="breathing-mode-buttons">
+                        <div class="breathing-mode-btn" onclick="showBreathingPreparation('calm')">
+                            <h3><span class="breathing-icon-leaf"></span>Calm Breathing</h3>
+                            <p>Stress reduction and deep relaxation</p>
+                        </div>
+                        <div class="breathing-mode-btn" onclick="showBreathingPreparation('energy')">
+                            <h3><span class="breathing-icon-energy"></span>Energy Boost</h3>
+                            <p>Natural invigoration and alertness</p>
+                        </div>
+                        <div class="breathing-mode-btn" onclick="showBreathingPreparation('focus')">
+                            <h3><span class="breathing-icon-focus"></span>Focus Breathing</h3>
+                            <p>Mental clarity and cognitive balance</p>
+                        </div>
+                    </div>
+                    <div class="breathing-research-citations">
+                        <h4>Research Foundation</h4>
+                        <p><strong>Lehrer et al.</strong> - International Journal of Psychophysiology: Optimal slow breathing at 6 breaths/min increases heart rate variability and promotes relaxation.</p>
+                        <p><strong>Budhi et al.</strong> - Cureus Journal (2024): High-frequency yoga breathing (Kapalabhati) modulates autonomic tone and improves working memory.</p>
+                        <p><strong>The Supportive Care</strong> (2023): Alternate nostril breathing improves blood pressure, attention and cognitive control after 1 month practice.</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-button back" onclick="backToBreathingIntro()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preparation Screen -->
+            <div class="breathing-preparation-screen" id="breathingPreparationScreen">
+                <h2 id="breathingPrepTitle">Calm Breathing Preparation</h2>
+                <div class="breathing-preparation-content" id="breathingPrepContent">
+                    <!-- Content will be dynamically inserted -->
+                </div>
+                <div class="breathing-preparation-buttons">
+                    <button class="nav-button back" onclick="backToBreathingModes()">← Back</button>
+                    <button class="nav-button" onclick="startBreathingSession()" style="background: var(--primary-green); color: white; border-color: var(--primary-green);">Start Therapy →</button>
+                </div>
+            </div>
+
+            <!-- Breathing Session Screen -->
+            <div class="breathing-session" id="breathingSession">
+                <div class="breathing-session-header">
+                    <button class="breathing-back-btn" onclick="backToBreathingModes()">← Back to Modes</button>
+                    <div class="breathing-session-info">
+                        <div class="breathing-timer" id="breathingTimer">05:00</div>
+                    </div>
+                </div>
+
+                <h2 class="breathing-mode-title" id="breathingModeTitle">
+                    <span class="breathing-icon-leaf"></span>Calm Breathing
+                </h2>
+
+                <div class="breathing-circle-container">
+                    <svg class="breathing-progress-ring">
+                        <circle class="breathing-progress-ring-circle" cx="190" cy="190" r="190" id="breathingProgressCircle"/>
+                    </svg>
+                    <div class="breathing-circle" id="breathingCircle">
+                        <div class="breathing-timing-indicator" id="breathingTimingIndicator"></div>
+                        <div class="breathing-circle-text" id="breathingCircleText">Ready</div>
+                    </div>
+                </div>
+
+                <div class="breathing-instructions" id="breathingInstructions">Get ready to begin your oxygen therapy...</div>
+
+                <div class="breathing-controls">
+                    <button class="breathing-control-btn" id="breathingPlayPauseBtn" onclick="toggleBreathingPlayPause()">Start</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body Scan Training Page -->
+        <div id="bodyScanPage" class="page body-scan-training-page">
+            <!-- Benefits Page -->
+            <div class="body-scan-benefits-page" id="bodyScanBenefitsPage">
+                <!-- Header -->
+                <header class="header">
+                    <div class="header-logo">O₂</div>
+                    <h1 class="greeting">Body Scan Meditation</h1>
+                </header>
+                
+                <!-- Main content -->
+                <main class="main-content">
+                    <!-- Introduction section -->
+                    <div class="body-scan-intro-section">
+                        <h2 class="body-scan-intro-title">What is Body Scan Meditation?</h2>
+                        <p class="body-scan-intro-description">
+                            A simple yet powerful mindfulness practice where you systematically focus on different parts of your body. This evidence-based technique promotes deep relaxation, reduces stress, and builds greater body awareness.
+                        </p>
+                    </div>
+                    
+                    <!-- Benefits container -->
+                    <div class="body-scan-benefits-container">
+                        <!-- Benefit 1: Stress Reduction -->
+                        <div class="body-scan-benefit-card">
+                            <div class="body-scan-benefit-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="body-scan-benefit-title">Reduces Stress & Cortisol</h3>
+                            <p class="body-scan-benefit-description">
+                                Just 20 minutes daily significantly lowers cortisol - your body's main stress hormone linked to inflammation and sleep issues.
+                            </p>
+                            <div class="body-scan-benefit-evidence">
+                                8-week study shows measurable cortisol reduction (Schultchen et al., 2019)
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 2: Pain Management -->
+                        <div class="body-scan-benefit-card">
+                            <div class="body-scan-benefit-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3 class="body-scan-benefit-title">Manages Chronic Pain</h3>
+                            <p class="body-scan-benefit-description">
+                                Changes your relationship with pain through increased awareness and acceptance. Recommended by Jon Kabat-Zinn as the most effective meditation for pain relief.
+                            </p>
+                            <div class="body-scan-benefit-evidence">
+                                Review of 13 studies confirms chronic pain reduction (2017)
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 3: Sleep Quality -->
+                        <div class="body-scan-benefit-card">
+                            <div class="body-scan-benefit-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <h3 class="body-scan-benefit-title">Improves Sleep Quality</h3>
+                            <p class="body-scan-benefit-description">
+                                Activates your body's relaxation response, leading to better sleep and reduced daytime fatigue.
+                            </p>
+                            <div class="body-scan-benefit-evidence">
+                                Clinical trials confirm improved sleep quality (Black et al., 2015)
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 4: Emotional Regulation -->
+                        <div class="body-scan-benefit-card">
+                            <div class="body-scan-benefit-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <h3 class="body-scan-benefit-title">Enhances Emotional Regulation</h3>
+                            <p class="body-scan-benefit-description">
+                                Builds your ability to recognize and respond to internal body signals, leading to better emotional control and reduced anxiety.
+                            </p>
+                            <div class="body-scan-benefit-evidence">
+                                8-week study shows improved emotional awareness (Fischer et al., 2017)
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 5: Focus & Attention -->
+                        <div class="body-scan-benefit-card">
+                            <div class="body-scan-benefit-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3 class="body-scan-benefit-title">Improves Focus & Attention</h3>
+                            <p class="body-scan-benefit-description">
+                                Trains your concentration skills, helping you stay present and reducing mind-wandering.
+                            </p>
+                            <div class="body-scan-benefit-evidence">
+                                Studies show enhanced attention through brain changes (Tang et al., 2015)
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 6: Physical Tension Release -->
+                        <div class="body-scan-benefit-card">
+                            <div class="body-scan-benefit-icon">
+                                <i class="fas fa-spa"></i>
+                            </div>
+                            <h3 class="body-scan-benefit-title">Releases Physical Tension</h3>
+                            <p class="body-scan-benefit-description">
+                                Helps identify and release physical tension you didn't know you were carrying, breaking the stress cycle.
+                            </p>
+                            <div class="body-scan-benefit-evidence">
+                                Regular practice reduces muscle tension and inflammation
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation buttons -->
+                    <div class="nav-buttons">
+                        <button class="nav-button back" onclick="exitBodyScanTraining()">
+                            <i class="fas fa-arrow-left"></i> Back to Training Menu
+                        </button>
+                        <button class="nav-button" onclick="showBodyScanMeditation()">
+                            <i class="fas fa-play"></i> Start Your Body Scan Journey
+                        </button>
+                    </div>
+                </main>
+            </div>
+            
+            <!-- Meditation Page -->
+            <div class="body-scan-meditation-page" id="bodyScanMeditationPage" style="display: none;">
+                <!-- Header -->
+                <header class="header">
+                    <div class="header-logo">O₂</div>
+                    <h1 class="greeting">Guided Body Scan</h1>
+                </header>
+                
+                <!-- Main content -->
+                <main class="main-content">
+                    <div class="body-scan-meditation-section">
+                        <div class="body-scan-meditation-card">
+                            <div class="body-scan-meditation-icon">
+                                <i class="fas fa-lotus"></i>
+                            </div>
+                            <h2 class="body-scan-meditation-title">Ready to Begin?</h2>
+                            <p class="body-scan-meditation-description">
+                                Find a comfortable position. Allow yourself to settle into this moment of self-care and mindfulness. The guided meditation will take you through a gentle journey of awareness and relaxation.
+                            </p>
+                            <a href="https://www.youtube.com/watch?v=5mOZMxVKmiY" target="_blank" class="body-scan-meditation-button">
+                                <i class="fab fa-youtube"></i>
+                                Start Guided Meditation
+                            </a>
+                        </div>
+                        
+                        <!-- Navigation buttons -->
+                        <div class="nav-buttons" style="margin-top: 40px;">
+                            <button class="nav-button back" onclick="showBodyScanBenefits()">
+                                <i class="fas fa-arrow-left"></i> Back to Benefits
+                            </button>
+                            <button class="nav-button" onclick="completeBodyScanTraining()">
+                                <i class="fas fa-check"></i> Complete Training
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    
+    <script src="cfhp.js"></script>
+</body>
+</html>
