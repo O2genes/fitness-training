@@ -356,10 +356,51 @@ let visionGameState = {
     totalRounds: 0,
     gameInterval: null,
     maxRounds: 20,
-    roundCompleted: false
+    roundCompleted: false,
+    difficulty: 'normal',
+    changeInterval: 1200
 };
 
+// Vision Training Record System Variables
+let visionCurrentSessionAverage = 0;
+let visionIsNewRecord = false;
+let visionNewRecordDifficulty = '';
+
 // Vision Training Functions
+function showVisionDifficultySelection() {
+    document.getElementById('visionInstructions').classList.add('hidden');
+    document.getElementById('visionDifficultySelection').classList.remove('hidden');
+}
+
+function selectVisionDifficulty(difficulty) {
+    visionGameState.difficulty = difficulty;
+    
+    // Set the change interval based on difficulty
+    switch (difficulty) {
+        case 'simple':
+            visionGameState.changeInterval = 1500;
+            break;
+        case 'normal':
+            visionGameState.changeInterval = 1200;
+            break;
+        case 'hard':
+            visionGameState.changeInterval = 900;
+            break;
+        case 'challenging':
+            visionGameState.changeInterval = 700;
+            break;
+        case 'impossible':
+            visionGameState.changeInterval = 500;
+            break;
+        default:
+            visionGameState.changeInterval = 1200;
+    }
+    
+    // Hide difficulty selection and start game
+    document.getElementById('visionDifficultySelection').classList.add('hidden');
+    startVisionTraining();
+}
+
 function startVisionTraining() {
     const colorIndex = Math.floor(Math.random() * visionColors.length);
     visionGameState.targetColor = visionColors[colorIndex];
@@ -377,7 +418,6 @@ function startVisionTraining() {
     // Update target color name display
     document.getElementById('visionTargetColorName').textContent = visionGameState.targetColorName;
     
-    document.getElementById('visionInstructions').classList.add('hidden');
     startVisionCountdown();
 }
 
@@ -419,7 +459,7 @@ function startVisionGame() {
         } else {
             nextVisionRound();
         }
-    }, 1500);
+    }, visionGameState.changeInterval);
 }
 
 function nextVisionRound() {
@@ -439,23 +479,23 @@ function nextVisionRound() {
         light.classList.remove('target', 'correct-feedback', 'wrong-feedback');
     });
     
-    // Generate random colors for all lights, ensuring they're different from target
-    const availableColors = visionColors.filter(color => color !== visionGameState.targetColor);
+    // Generate random colors for all lights, ensuring all 4 are different
+    const availableColors = [...visionColors]; // Copy all colors
     const currentColors = [];
     
-    // Fill 3 positions with non-target colors
-    for (let i = 0; i < 3; i++) {
-        const randomColor = availableColors[Math.floor(Math.random() * availableColors.length)];
-        currentColors.push(randomColor);
+    // Fill 4 positions with different colors, including the target color
+    for (let i = 0; i < 4; i++) {
+        const randomIndex = Math.floor(Math.random() * availableColors.length);
+        const selectedColor = availableColors[randomIndex];
+        currentColors.push(selectedColor);
+        // Remove the selected color from available colors to prevent duplicates
+        availableColors.splice(randomIndex, 1);
     }
     
-    // Add target color once
-    currentColors.push(visionGameState.targetColor);
-    
-    // Shuffle the array to randomize positions
-    for (let i = currentColors.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [currentColors[i], currentColors[j]] = [currentColors[j], currentColors[i]];
+    // Ensure target color is included (replace one random color if not present)
+    if (!currentColors.includes(visionGameState.targetColor)) {
+        const randomIndex = Math.floor(Math.random() * currentColors.length);
+        currentColors[randomIndex] = visionGameState.targetColor;
     }
     
     // Apply colors to lights
@@ -483,6 +523,7 @@ function updateVisionDisplay() {
         document.getElementById('visionBestTime').textContent = Math.round(bestTime);
     }
     
+    // Calculate accuracy based on completed rounds
     if (visionGameState.totalRounds > 0) {
         const accuracy = (visionGameState.correctClicks / visionGameState.totalRounds) * 100;
         document.getElementById('visionAccuracy').textContent = Math.round(accuracy);
@@ -497,19 +538,24 @@ function handleVisionLightClick(event) {
     const targetRGB = hexToRgb(visionGameState.targetColor);
     const targetRGBString = `rgb(${targetRGB.r}, ${targetRGB.g}, ${targetRGB.b})`;
     
+    // Mark round as completed to prevent multiple clicks
     visionGameState.roundCompleted = true;
     visionGameState.totalRounds++;
     
     if (clickedColor === targetRGBString) {
+        // Correct click: +10 points and record response time
         visionGameState.correctClicks++;
         visionGameState.score += 10;
         visionGameState.responseTimes.push(responseTime);
         
+        // Visual feedback for correct click
         event.target.classList.add('correct-feedback');
         setTimeout(() => {
             event.target.classList.remove('correct-feedback');
         }, 600);
     } else {
+        // Wrong click: no points, no response time recorded
+        // Visual feedback for wrong click
         event.target.classList.add('wrong-feedback');
         setTimeout(() => {
             event.target.classList.remove('wrong-feedback');
@@ -551,6 +597,11 @@ function endVisionGame() {
         <p>Best Response Time: ${bestTime > 0 ? Math.round(bestTime) + 'ms' : 'N/A'}</p>
         <p>Target Color: ${visionGameState.targetColorName}</p>
     `;
+    
+    // Check for new record and handle record system
+    visionCurrentSessionAverage = avgResponse;
+    checkForVisionNewRecord(avgResponse);
+    displayVisionRecordWall();
     
     document.getElementById('visionResults').classList.remove('hidden');
 }
@@ -615,6 +666,8 @@ function exitVisionTraining() {
 function resetVisionGame() {
     document.getElementById('visionResults').classList.add('hidden');
     document.getElementById('visionInstructions').classList.remove('hidden');
+    document.getElementById('visionDifficultySelection').classList.add('hidden');
+    document.getElementById('visionCongratulationsModal').classList.remove('show');
     
     // Reset lights
     const lights = document.querySelectorAll('.vision-light');
@@ -633,6 +686,12 @@ function resetVisionGame() {
     // Reset target color name
     document.getElementById('visionTargetColorName').textContent = '-';
     
+    // Reset record system variables
+    visionCurrentSessionAverage = 0;
+    visionIsNewRecord = false;
+    visionNewRecordDifficulty = '';
+    document.getElementById('visionNicknameInput').value = '';
+    
     // Reset game state
     visionGameState = {
         isPlaying: false,
@@ -646,10 +705,109 @@ function resetVisionGame() {
         totalRounds: 0,
         gameInterval: null,
         maxRounds: 20,
-        roundCompleted: false
+        roundCompleted: false,
+        difficulty: 'normal',
+        changeInterval: 1200
     };
     
     updateVisionDisplay();
+}
+
+// Vision Training Record System Functions
+function getVisionRecords() {
+    const records = localStorage.getItem('visionGameRecords');
+    if (records) {
+        return JSON.parse(records);
+    }
+    return {
+        simple: { time: null, nickname: null },
+        normal: { time: null, nickname: null },
+        hard: { time: null, nickname: null },
+        challenging: { time: null, nickname: null },
+        impossible: { time: null, nickname: null }
+    };
+}
+
+function saveVisionRecordToStorage(difficulty, time, nickname) {
+    const records = getVisionRecords();
+    records[difficulty] = {
+        time: time,
+        nickname: nickname
+    };
+    localStorage.setItem('visionGameRecords', JSON.stringify(records));
+}
+
+function checkForVisionNewRecord(avgResponse) {
+    if (avgResponse <= 0) {
+        visionIsNewRecord = false;
+        return;
+    }
+
+    const records = getVisionRecords();
+    const currentRecord = records[visionGameState.difficulty];
+    
+    // Check if this is the first time playing this difficulty OR if it's a new record (faster time)
+    if (!currentRecord.time || avgResponse < currentRecord.time) {
+        visionIsNewRecord = true;
+        visionNewRecordDifficulty = visionGameState.difficulty;
+        
+        // Show congratulations modal
+        const messageText = !currentRecord.time ? 
+            `First ${visionGameState.difficulty} difficulty record: ${Math.round(avgResponse)}ms average response time!` :
+            `New ${visionGameState.difficulty} difficulty record: ${Math.round(avgResponse)}ms average response time!`;
+        
+        document.getElementById('visionRecordDetails').textContent = messageText;
+        document.getElementById('visionCongratulationsModal').classList.add('show');
+        document.getElementById('visionNicknameInput').focus();
+    } else {
+        visionIsNewRecord = false;
+    }
+}
+
+function saveVisionRecord() {
+    const nickname = document.getElementById('visionNicknameInput').value.trim() || 'Anonymous';
+    if (visionIsNewRecord) {
+        saveVisionRecordToStorage(visionNewRecordDifficulty, visionCurrentSessionAverage, nickname);
+    }
+    document.getElementById('visionCongratulationsModal').classList.remove('show');
+    document.getElementById('visionNicknameInput').value = '';
+    displayVisionRecordWall();
+}
+
+function skipVisionRecord() {
+    document.getElementById('visionCongratulationsModal').classList.remove('show');
+    document.getElementById('visionNicknameInput').value = '';
+}
+
+function displayVisionRecordWall() {
+    const records = getVisionRecords();
+    const difficulties = ['simple', 'normal', 'hard', 'challenging', 'impossible'];
+    const difficultyNames = {
+        simple: 'Simple (1.5s)',
+        normal: 'Normal (1.2s)',
+        hard: 'Hard (0.9s)',
+        challenging: 'Challenging (0.7s)',
+        impossible: 'Impossible (0.5s)'
+    };
+    
+    let recordsHTML = '';
+    
+    difficulties.forEach(difficulty => {
+        const record = records[difficulty];
+        const isCurrentRecord = visionIsNewRecord && difficulty === visionNewRecordDifficulty;
+        
+        recordsHTML += `
+            <div class="vision-record-item ${isCurrentRecord ? 'new-record' : ''}">
+                <div class="vision-record-difficulty">${difficultyNames[difficulty]}</div>
+                <div class="vision-record-info">
+                    <div class="vision-record-time">${record.time ? Math.round(record.time) + 'ms' : 'No Record'}</div>
+                    <div class="vision-record-holder">${record.nickname || ''}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    document.getElementById('visionRecordsList').innerHTML = recordsHTML;
 }
 
 // Add event listeners for vision training when the page loads
@@ -660,6 +818,16 @@ document.addEventListener('DOMContentLoaded', function() {
         visionLights.forEach(light => {
             light.addEventListener('click', handleVisionLightClick);
         });
+        
+        // Add Enter key listener for nickname input
+        const visionNicknameInput = document.getElementById('visionNicknameInput');
+        if (visionNicknameInput) {
+            visionNicknameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveVisionRecord();
+                }
+            });
+        }
     }, 100);
 });
 
