@@ -1426,6 +1426,265 @@ body {
     animation: wrongPulse 0.6s ease-out;
 }
 
+/* Vision Training Difficulty Selection */
+.vision-difficulty-selection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--primary-green);
+    text-align: center;
+    font-size: 18px;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 600px;
+    border: 2px solid var(--accent-blue);
+    backdrop-filter: blur(20px);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.vision-difficulty-selection h2 {
+    margin-bottom: 25px;
+    color: var(--accent-blue);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.vision-difficulty-selection p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.vision-difficulty-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.vision-difficulty-btn {
+    background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+    color: var(--cream);
+    border: 2px solid var(--accent-blue);
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+    box-shadow: 0 5px 20px rgba(28, 78, 59, 0.3);
+}
+
+.vision-difficulty-btn:hover {
+    background: linear-gradient(135deg, var(--light-green), var(--accent-blue));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(28, 78, 59, 0.4);
+    border-color: var(--cream);
+}
+
+.vision-difficulty-btn:active {
+    transform: scale(0.95);
+}
+
+.vision-difficulty-btn.challenging {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    border-color: #d35400;
+}
+
+.vision-difficulty-btn.challenging:hover {
+    background: linear-gradient(135deg, #d35400, #e67e22);
+    border-color: var(--cream);
+}
+
+.vision-difficulty-btn.impossible {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border-color: #c0392b;
+}
+
+.vision-difficulty-btn.impossible:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    border-color: var(--cream);
+}
+
+.vision-difficulty-description {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+/* Vision Record Wall */
+.vision-record-wall {
+    margin-top: 25px;
+    padding: 20px;
+    background: rgba(110, 165, 177, 0.1);
+    border-radius: 10px;
+    border: 1px solid var(--accent-blue);
+}
+
+.vision-record-wall h3 {
+    color: var(--primary-green);
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.vision-record-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    border-left: 4px solid var(--accent-blue);
+}
+
+.vision-record-item.new-record {
+    border-left-color: #00FF88;
+    background: rgba(0, 255, 136, 0.1);
+    animation: newRecordGlow 2s ease-in-out;
+}
+
+@keyframes newRecordGlow {
+    0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 136, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
+}
+
+.vision-record-difficulty {
+    font-weight: 600;
+    color: var(--primary-green);
+}
+
+.vision-record-info {
+    text-align: right;
+    font-size: 12px;
+}
+
+.vision-record-time {
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
+.vision-record-holder {
+    color: var(--primary-green);
+    opacity: 0.8;
+}
+
+/* Vision Congratulations Modal */
+.vision-congratulations-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(28, 78, 59, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.vision-congratulations-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.vision-congratulations-content {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 500px;
+    border: 3px solid #00FF88;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+    animation: celebrationPulse 2s ease-in-out infinite;
+}
+
+@keyframes celebrationPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 0 40px rgba(0, 255, 136, 0.8);
+    }
+}
+
+.vision-congratulations-content h2 {
+    color: #00FF88;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.vision-congratulations-content p {
+    color: var(--primary-green);
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.vision-nickname-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--accent-blue);
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.vision-nickname-input:focus {
+    outline: none;
+    border-color: #00FF88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.vision-modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.vision-modal-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vision-modal-btn.save {
+    background: linear-gradient(135deg, #00FF88, #00CC70);
+    color: white;
+}
+
+.vision-modal-btn.save:hover {
+    background: linear-gradient(135deg, #00CC70, #00AA5C);
+    transform: translateY(-2px);
+}
+
+.vision-modal-btn.skip {
+    background: var(--gray);
+    color: var(--primary-green);
+}
+
+.vision-modal-btn.skip:hover {
+    background: #d0d0d0;
+}
+
 @keyframes correctPulse {
     0% { 
         transform: scale(1);

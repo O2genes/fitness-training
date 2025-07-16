@@ -473,13 +473,42 @@
                 <div class="vision-instructions" id="visionInstructions">
                     <h2>Peripheral Vision Training</h2>
                     <p><strong>Instructions:</strong></p>
-                    <p>1. Keep your eyes focused on the colored dot in the center at all times</p>
-                    <p>2. Four colored lights will appear in the corners and change every 1.5 seconds</p>
-                    <p>3. Click the light that matches the target color as quickly as possible</p>
-                    <p>4. Use only your peripheral vision - don't look directly at the lights!</p>
-                    <p>5. Use the "Exit Training" button to quit anytime</p>
+                    <p>1. Keep your eyes focused on the dot at the center at all times</p>
+                    <p>2. Four colored lights will appear on the corners and change based on your difficulty level</p>
+                    <p>3. Press the light that matches the target color as quickly as possible</p>
+                    <p>4. Use only your peripheral vision - don't look directly at the colored lights on the corners!</p>
+                    <p>5. Only correct responses count toward your average response time</p>
+                    <p>6. Use the "Exit Training" button to quit anytime</p>
                     <br>
-                    <button class="nav-button" onclick="startVisionTraining()">Start Training</button>
+                    <button class="nav-button" onclick="showVisionDifficultySelection()">Continue to Difficulty Selection</button>
+                </div>
+
+                <div class="vision-difficulty-selection hidden" id="visionDifficultySelection">
+                    <h2>Choose Difficulty Level</h2>
+                    <p><strong>Select your preferred difficulty:</strong></p>
+                    <p>The difficulty affects how fast the colored lights change.</p>
+                    <div class="vision-difficulty-buttons">
+                        <button class="vision-difficulty-btn simple" onclick="selectVisionDifficulty('simple')">
+                            Simple
+                            <div class="vision-difficulty-description">Lights change every 1.5 seconds</div>
+                        </button>
+                        <button class="vision-difficulty-btn normal" onclick="selectVisionDifficulty('normal')">
+                            Normal
+                            <div class="vision-difficulty-description">Lights change every 1.2 seconds</div>
+                        </button>
+                        <button class="vision-difficulty-btn hard" onclick="selectVisionDifficulty('hard')">
+                            Hard
+                            <div class="vision-difficulty-description">Lights change every 0.9 seconds</div>
+                        </button>
+                        <button class="vision-difficulty-btn challenging" onclick="selectVisionDifficulty('challenging')">
+                            Challenging
+                            <div class="vision-difficulty-description">Lights change every 0.7 seconds</div>
+                        </button>
+                        <button class="vision-difficulty-btn impossible" onclick="selectVisionDifficulty('impossible')">
+                            Impossible
+                            <div class="vision-difficulty-description">Lights change every 0.5 seconds</div>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="vision-countdown hidden" id="visionCountdown">3</div>
@@ -487,9 +516,27 @@
                 <div class="vision-results hidden" id="visionResults">
                     <h2>Training Complete!</h2>
                     <div id="visionFinalStats"></div>
+                    <div class="vision-record-wall" id="visionRecordWall">
+                        <h3>🏆 History Record Wall 🏆</h3>
+                        <div id="visionRecordsList"></div>
+                    </div>
                     <div class="nav-buttons">
                         <button class="nav-button" onclick="resetVisionGame()">Train Again</button>
                         <button class="nav-button back" onclick="exitVisionTraining()">Back to Training Menu</button>
+                    </div>
+                </div>
+
+                <!-- Congratulations Modal -->
+                <div class="vision-congratulations-modal" id="visionCongratulationsModal">
+                    <div class="vision-congratulations-content">
+                        <h2>🎉 Congratulations! 🎉</h2>
+                        <p>You have broken the history record!</p>
+                        <p id="visionRecordDetails"></p>
+                        <input type="text" class="vision-nickname-input" id="visionNicknameInput" placeholder="Enter your nickname" maxlength="20">
+                        <div class="vision-modal-buttons">
+                            <button class="vision-modal-btn save" onclick="saveVisionRecord()">Save Record</button>
+                            <button class="vision-modal-btn skip" onclick="skipVisionRecord()">Skip</button>
+                        </div>
                     </div>
                 </div>
             </div>
